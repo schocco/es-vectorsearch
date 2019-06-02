@@ -1,0 +1,11 @@
+# Similarity search on vector fields with ElasticSearch
+
+experimenting with elasticsearch features for vector fields
+
+## Setup
+
+- clone and build elasticsearch to get a current snapshot version docker image
+- run `docker-compose up`
+- `./mvnw package -Pdownload` to build the application with the *download* profile to get the glove word embeddings
+- run the built jar, then type "import" in the shell for an initial import of the words into elaticsearch
+- type `similar --to <word>` in the shell to see similar words
