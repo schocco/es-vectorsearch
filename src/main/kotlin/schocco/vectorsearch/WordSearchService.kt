@@ -77,7 +77,7 @@ class WordSearchService {
         val searchRequest = SearchRequest().source(
                 SearchSourceBuilder.searchSource()
                         .query(scriptScoreQuery(QueryBuilders.boolQuery().mustNot(matchQuery("_id", getResponse.id)), ScriptScoreFunctionBuilder(script)))
-                        .size(10)
+                        .size(NUM_RESULTS)
                         .fetchSource(null, arrayOf("vector"))
         )
         val hits = client.search(searchRequest, RequestOptions.DEFAULT).hits
@@ -86,6 +86,7 @@ class WordSearchService {
 
     companion object {
         private const val WORDS_INDEX = "words"
+        private const val NUM_RESULTS = 20
     }
 
 }

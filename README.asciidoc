@@ -9,3 +9,27 @@ experimenting with elasticsearch features for vector fields
 - `./mvnw package -Pdownload` to build the application with the *download* profile to get the glove word embeddings
 - run the built jar, then type "import" in the shell for an initial import of the words into elaticsearch
 - type `similar --to <word>` in the shell to see similar words
+
+```
+shell:>similar --to cat
+{"word":"dog","score":1.9218005}
+{"word":"rabbit","score":1.8487821}
+{"word":"monkey","score":1.8041081}
+{"word":"rat","score":1.7891964}
+{"word":"cats","score":1.786527}
+{"word":"snake","score":1.779891}
+{"word":"dogs","score":1.7795815}
+{"word":"pet","score":1.7792249}
+{"word":"mouse","score":1.7731668}
+{"word":"bite","score":1.77288}
+{"word":"shark","score":1.7655175}
+{"word":"puppy","score":1.76256}
+{"word":"monster","score":1.7619764}
+{"word":"spider","score":1.7521701}
+{"word":"beast","score":1.7520056}
+{"word":"crocodile","score":1.7498653}
+{"word":"baby","score":1.7463862}
+{"word":"pig","score":1.7445586}
+{"word":"frog","score":1.7426511}
+{"word":"bug","score":1.7365949}
+```
