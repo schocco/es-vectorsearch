@@ -56,7 +56,7 @@ class WordSearchService {
                     .id(it.word)
                     .opType(DocWriteRequest.OpType.INDEX)
 
-                    .source(mapOf("word" to it.word as String, "vector" to it.vector as Number))
+                    .source(mapOf("word" to it.word, "vector" to it.vector))
             bulkRequest.add(indexRequest)
         }
         client.bulk(bulkRequest, RequestOptions.DEFAULT)
