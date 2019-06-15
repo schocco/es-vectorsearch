@@ -138,6 +138,9 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>es.test</id>
+        </profile>
     </profiles>
 
 </project>

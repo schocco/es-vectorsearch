@@ -15,6 +15,6 @@ class ElasticCommandsTest {
     @Test
     fun testImport() {
         val service = mock(WordSearchService::class.java)
-        ElasticCommands(service).import()
+        ElasticCommands(service).import("50")
     }
 }

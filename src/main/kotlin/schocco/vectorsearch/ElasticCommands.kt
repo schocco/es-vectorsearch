@@ -12,13 +12,13 @@ import java.io.File
 class ElasticCommands(val service: WordSearchService) {
 
     @ShellMethod("Load the GLOVE word embeddings into elasticsearch")
-    fun import(@ShellOption dimensions: String = "50"): String {
+    fun import(@ShellOption(defaultValue = "50") dimensions: String = "50"): String {
         service.ensureWordsIndex()
         val fileName = "glove.6B.${dimensions}d.txt"
         File(fileName).bufferedReader().useLines {
-            it.chunked(20).forEachIndexed { idx, chunk ->
+            it.chunked(CHUNK_SIZE).forEachIndexed { idx, chunk ->
                 LOGGER.info("Processing chunk $idx of $fileName")
-                service.bulkInsert(chunk.map {line -> lineToWordVector(line) })
+                service.bulkInsert(chunk.map { line -> lineToWordVector(line) })
             }
         }
         return "done"
@@ -27,7 +27,8 @@ class ElasticCommands(val service: WordSearchService) {
     @ShellMethod("Display potentially similar/related words")
     fun similar(@ShellOption to: String): String {
         val objectMapper: ObjectMapper = ObjectMapper()
-        return service.findSimilarWords(to)?.joinToString("\n") { objectMapper.writeValueAsString(it) } ?: "word unknown"
+        return service.findSimilarWords(to)?.joinToString("\n") { objectMapper.writeValueAsString(it) }
+                ?: "word unknown"
     }
 
 
@@ -37,7 +38,8 @@ class ElasticCommands(val service: WordSearchService) {
     }
 
     companion object {
-    val LOGGER: Logger = LoggerFactory.getLogger(ElasticCommands::class.java)
-}
+        val LOGGER: Logger = LoggerFactory.getLogger(ElasticCommands::class.java)
+        const val CHUNK_SIZE = 100
+    }
 }
 

@@ -1,12 +1,18 @@
-# Similarity search on vector fields with ElasticSearch
+# Similarity search in word embeddings with Elasticsearch
 
-experimenting with elasticsearch features for vector fields
+This project provides a shell (based on https://projects.spring.io/spring-shell/[spring shell]) to bulk import the https://github.com/stanfordnlp/GloVe[GloVe] word
+embeddings into Elasticsearch and to query for similar words using cosine similarity.
+
+It uses Elasticsearch's https://www.elastic.co/guide/en/elasticsearch/reference/7.2/dense-vector.html[dense vector fieldtype]
+and https://www.elastic.co/guide/en/elasticsearch/reference/7.2/query-dsl-script-score-query.html#query-dsl-script-score-query[script score queries]
+with the predefined cosineSimilarity function which is introduced in Elasticsearch 7.2.
+
 
 ## Setup
 
-- clone and build elasticsearch to get a current snapshot version docker image
+- clone and build https://github.com/elastic/elasticsearch[Elasticsearch] to get a current snapshot version docker image
 - run `docker-compose up`
-- `./mvnw package -Pdownload` to build the application with the *download* profile to get the glove word embeddings
+- run `./mvnw package -Pdownload` to build the application with the *download* profile to get the glove word embeddings
 - run the built jar, then type "import" in the shell for an initial import of the words into elaticsearch
 - type `similar --to <word>` in the shell to see similar words
 
@@ -33,3 +39,6 @@ shell:>similar --to cat
 {"word":"frog","score":1.7426511}
 {"word":"bug","score":1.7365949}
 ```
+
+
+Set the `es.test` profile to run the `WordSearchServiceTest` against the dockerized Elasticsearch instance.
