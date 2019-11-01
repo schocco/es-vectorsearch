@@ -13,7 +13,7 @@ class ElasticCommands(val service: WordSearchService) {
 
     @ShellMethod("Load the GLOVE word embeddings into elasticsearch")
     fun import(@ShellOption(defaultValue = "50") dimensions: String = "50"): String {
-        service.ensureWordsIndex()
+        service.ensureWordsIndex(dimensions.toInt())
         val fileName = "glove.6B.${dimensions}d.txt"
         File(fileName).bufferedReader().useLines {
             it.chunked(CHUNK_SIZE).forEachIndexed { idx, chunk ->

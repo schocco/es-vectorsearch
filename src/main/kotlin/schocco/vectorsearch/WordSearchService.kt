@@ -1,6 +1,7 @@
 package schocco.vectorsearch
 
 import org.apache.http.HttpHost
+import org.elasticsearch.ElasticsearchStatusException
 import org.elasticsearch.action.DocWriteRequest
 import org.elasticsearch.action.bulk.BulkRequest
 import org.elasticsearch.action.get.GetRequest
@@ -16,6 +17,7 @@ import org.elasticsearch.index.query.QueryBuilders
 import org.elasticsearch.index.query.QueryBuilders.matchQuery
 import org.elasticsearch.index.query.QueryBuilders.scriptScoreQuery
 import org.elasticsearch.index.query.functionscore.ScriptScoreFunctionBuilder
+import org.elasticsearch.rest.RestStatus
 import org.elasticsearch.script.Script
 import org.elasticsearch.script.Script.DEFAULT_SCRIPT_LANG
 import org.elasticsearch.script.ScriptType
@@ -30,21 +32,26 @@ class WordSearchService {
             RestClient.builder(HttpHost("localhost", 9200, "http")))
 
 
-    fun ensureWordsIndex() {
+    fun ensureWordsIndex(dims: Number = 50) {
         val createIndexRequest = CreateIndexRequest(WORDS_INDEX)
         createIndexRequest.mapping(
                 """{
                   "properties": {
                     "vector": {
-                      "type": "dense_vector"
+                      "type": "dense_vector",
+                      "dims": $dims
                     }
                   }
                 }
                 """,
                 XContentType.JSON
         )
-        if (client.indices().get(GetIndexRequest(WORDS_INDEX), RequestOptions.DEFAULT).indices.isEmpty()) {
-            client.indices().create(createIndexRequest, RequestOptions.DEFAULT)
+        try {
+            client.indices().get(GetIndexRequest(WORDS_INDEX), RequestOptions.DEFAULT)
+        } catch (e: ElasticsearchStatusException) {
+            if (e.status() == RestStatus.NOT_FOUND) {
+                client.indices().create(createIndexRequest, RequestOptions.DEFAULT)
+            }
         }
 
     }
@@ -64,7 +71,7 @@ class WordSearchService {
 
     fun findSimilarWords(word: String): List<WordResult>? {
         val getResponse = client.get(GetRequest(WORDS_INDEX, word), RequestOptions.DEFAULT)
-        if(getResponse.isSourceEmpty) {
+        if (getResponse.isSourceEmpty) {
             return null
         }
         val knownVector = getResponse.source.getValue("vector")

@@ -1,4 +1,4 @@
-# Similarity search in word embeddings with Elasticsearch
+= Similarity search in word embeddings with Elasticsearch
 
 This project provides a shell (based on https://projects.spring.io/spring-shell/[spring shell]) to bulk import the https://github.com/stanfordnlp/GloVe[GloVe] word
 embeddings into Elasticsearch and to query for similar words using cosine similarity.
@@ -8,9 +8,8 @@ and https://www.elastic.co/guide/en/elasticsearch/reference/7.2/query-dsl-script
 with the predefined cosineSimilarity function which is introduced in Elasticsearch 7.2.
 
 
-## Setup
+== Setup
 
-- clone and build https://github.com/elastic/elasticsearch[Elasticsearch] to get a current snapshot version docker image
 - run `docker-compose up`
 - run `./mvnw package -Pdownload` to build the application with the *download* profile to get the glove word embeddings
 - run the built jar, then type "import" in the shell for an initial import of the words into elaticsearch
