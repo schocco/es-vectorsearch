@@ -32,7 +32,7 @@ class WordSearchService {
             RestClient.builder(HttpHost("localhost", 9200, "http")))
 
 
-    fun ensureWordsIndex(dims: Number = 50) {
+    fun ensureWordsIndex(dims: Number) {
         val createIndexRequest = CreateIndexRequest(WORDS_INDEX)
         createIndexRequest.mapping(
                 """{
